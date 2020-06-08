@@ -24,7 +24,7 @@ classdef AppConnector
                 eval(['propList = properties(''',...
                     classList(i).name(1:end-2),''');'])
                 
-                %if class has name properties read properties
+                %if class has name properties get
                 if length(propList) > 1
                     eval(['item = ',classList(i).name(1:end-2),'.',...
                         propList{1},';'])
@@ -54,17 +54,11 @@ classdef AppConnector
             %get list of properties
             propList = properties(classname);
             
-            %if class has name properties read properties
+            %if class has name properties
             if length(propList)>1
                 eval(['item = ',convertStringsToChars(classname),'.',...
                     propList{2},';'])
-                 %%
-                    %TODO: in service app class
-                    %set app data structure with names for dropdown and
-                    %method names for callback
                 appObj.p_LoadedMethods = [appObj.p_LoadedMethods; item];
-                
-                %set dropdown
                 for i = 1:length(item)
                     appObj.DropDown_SynthesisOption.Items = ...
                         [appObj.DropDown_SynthesisOption.Items, item(i,1)];
