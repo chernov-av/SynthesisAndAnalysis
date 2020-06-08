@@ -19,7 +19,8 @@ classdef AppConnector
             for i = 1:length(classList)
                 eval(['propList = properties(''',...
                     classList(i).name(1:end-2),''');'])
-                if length(propList) > 1                    
+                if length(propList) > 1
+                    
                     eval(['item = ',classList(i).name(1:end-2),'.',...
                         propList{1},';'])
                     appObj.p_LoadedClasses = [appObj.p_LoadedClasses; item];
@@ -30,18 +31,16 @@ classdef AppConnector
         end
         
         function detectInternalMethods(classname,appObj)
-                appObj.DropDown_SynthesisOption.Items = {};
-                appObj.p_LoadedMethods = [];
+            
                 propList = properties(classname);
                 if length(propList)>1
-                    eval(['item = ',convertStringsToChars(classname),'.',...
+                    eval(['item = ',classname,'.',...
                         propList{2},';'])
-                     appObj.p_LoadedMethods = [appObj.p_LoadedMethods; item];
-                    for i = 1:length(item)
-                        appObj.DropDown_SynthesisOption.Items = ...
-                            [appObj.DropDown_SynthesisOption.Items, item(i,1)];
-                    end
-                end           
+                    appObj.DropDown_SynthesisOption.Items = ...
+                        [appObj.DropDown_SynthesisOption.Items, item(2)];
+                end
+            
+            
         end
     end
 end

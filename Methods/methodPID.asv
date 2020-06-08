@@ -3,7 +3,7 @@ classdef methodPID
     %   class for pid tuning
     %   WARNING: properties are required to connect class
     %   NAME ["text name for dropdown" "class name"]
-    %   Methods ["text name for dropdown" "names of methods need to call"]
+    %   Methods ["text name for dropdown" "class name"]
     
     properties (Constant)
         Name = ["PID" "methodPID"]
