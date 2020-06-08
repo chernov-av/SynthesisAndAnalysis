@@ -12,7 +12,7 @@ classdef AppConnector
             %   Detailed explanation goes here
         end
         
-        function detectSynthesisClasses(appObj)
+        function DetectSynthesisClasses(appObj)
             %detectSynthesisClasses
             %   detects and connects synthesis classes
             
@@ -42,7 +42,7 @@ classdef AppConnector
             end
         end
         
-        function detectInternalMethods(classname,appObj)
+        function DetectInternalMethods(appObj,classname)
             %detectSynthesisClasses
             %   detects and connects methods and functions in classes
             %   depends on class name
