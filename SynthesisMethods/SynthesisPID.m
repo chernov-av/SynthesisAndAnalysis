@@ -1,12 +1,12 @@
-classdef methodPID
+classdef SynthesisPID
     %METHODPID Summary of this class goes here
     %   class for pid tuning
     %   WARNING: properties are required to connect class
     %   NAME ["text name for dropdown" "class name"]
-    %   Methods ["text name for dropdown" "class name"]
+    %   Methods ["text name for dropdown" "names of methods need to call"]
     
     properties (Constant)
-        Name = ["PID" "methodPID"]
+        Name = ["PID" "SynthesisPID"]
         Methods = ["PID" "SyntPID";...
             "PI" "SyntPI";...
             "P" "SyntP";...
@@ -18,7 +18,7 @@ classdef methodPID
     end
     
     methods (Static)
-        function obj = methodPID(inputArg1,inputArg2)
+        function obj = SynthesisPID(inputArg1,inputArg2)
             %METHODPID Construct an instance of this class
             %   Detailed explanation goes here
             obj.Property1 = inputArg1 + inputArg2;
@@ -28,28 +28,28 @@ classdef methodPID
             %METHOD1 Summary of this method goes here
             %   Detailed explanation goes here
             Wreg = pidtune(Wobj,'PID');
-            Wsys = methodPID.getSysTF(Wobj,Wreg);
+            Wsys = SynthesisPID.getSysTF(Wobj,Wreg);
         end
         
         function [Wsys,Wreg] = SyntPI(Wobj)
             %METHOD1 Summary of this method goes here
             %   Detailed explanation goes here
             Wreg = pidtune(Wobj,'PI');
-            Wsys = methodPID.getSysTF(Wobj,Wreg);
+            Wsys = SynthesisPID.getSysTF(Wobj,Wreg);
         end
         
         function [Wsys,Wreg] = SyntP(Wobj)
             %METHOD1 Summary of this method goes here
             %   Detailed explanation goes here
             Wreg = pidtune(Wobj,'P');
-            Wsys = methodPID.getSysTF(Wobj,Wreg);
+            Wsys = SynthesisPID.getSysTF(Wobj,Wreg);
         end
         
         function [Wsys,Wreg] = SyntI(Wobj)
             %METHOD1 Summary of this method goes here
             %   Detailed explanation goes here
             Wreg = pidtune(Wobj,'I');
-            Wsys = methodPID.getSysTF(Wobj,Wreg);
+            Wsys = SynthesisPID.getSysTF(Wobj,Wreg);
         end
         
         function Wsys = getSysTF(Wobj,Wreg)
