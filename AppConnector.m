@@ -1,74 +1,91 @@
 classdef AppConnector
-    %APPCONNECTOR Summary of this class goes here
-    %   Detect and connect classes and methods
+    %APPCONNECTOR Folder scanner and module connector
+    %   Contains functions to:
+    %   - scan folders;
+    %   - find module classes for connection to app
+    %   - read module class properties
+    %   - create list of function to call from app
+    %   - determine possibility for GUI layout
     
-    properties
-        
+    properties (Access = public)
+        SearchFolder
     end
     
-    methods (Static)
-        function obj = AppConnector()
+    methods
+        function obj = AppConnector(searchFolder)
             %APPCONNECTOR Construct an instance of this class
-            %   Detailed explanation goes here
+            %   SearchFolder - folder with classes to connect
+            obj.SearchFolder = searchFolder;
+        end
+    end
+    
+    methods
+        
+        function fileList = scanFolder(obj)
+            %scanFolder returns list of files in the @SearchFolder
+            %
+            fileList = dir(obj.SearchFolder);
         end
         
-        function DetectSynthesisClasses(appObj)
-            %detectSynthesisClasses
-            %   detects and connects synthesis classes
-            
-            %get classlist from folder
-            classList = dir('SynthesisMethods');
-            
-            for i = 1:length(classList)
-                %read name properties
-                eval(['propList = properties(''',...
-                    classList(i).name(1:end-2),''');'])
-                
-                %if class has name properties read properties
-                if length(propList) > 1
-                    eval(['item = ',classList(i).name(1:end-2),'.',...
-                        propList{1},';'])
-                    
-                    %%
-                    %TODO: in service app class
-                    %set app data structure with names for dropdown and
-                    %class names for callback
-                    appObj.p_LoadedClasses = [appObj.p_LoadedClasses; item];
-                    
-                    %set dropdown
-                    appObj.DropDown_SynthesisMethods.Items = ...
-                        [appObj.DropDown_SynthesisMethods.Items, item(1)];
+        function ClassesForConnection = detectConnectedClasses(obj)
+            %detectConnectedClasses search classes in @SearchFolder
+            %   get list of classes in @SearchFolder for connection to main
+            %   application
+            fileList = obj.scanFolder();
+            fileList = fileList(3:end);
+            LengthFileList = length(fileList);
+            ClassesForConnection = strings(LengthFileList,1);
+            for i = 1:LengthFileList
+                ClassesForConnection(i) = fileList(i).name(1:end-2);
+            end
+        end
+        
+        function ItemsForGUI = getClassItemsForGUI(obj,List)
+            %getClassItemsForGUI get names of classes to visualize on GUI
+            %   List - list of classes, which contain functions need to be
+            %   called
+            ItemsForGUI = [];
+            for i = 1 : length(List)
+                %read name property of the class
+                PropertyList = properties(List(i));
+                if length(PropertyList) > 1
+                    item = [];
+                    eval(['item = ',char(List(i)),'.',...
+                        PropertyList{1},';']);
+                    ItemsForGUI = [ItemsForGUI;item];
                 end
             end
         end
         
-        function DetectInternalMethods(appObj,classname)
-            %detectSynthesisClasses
-            %   detects and connects methods and functions in classes
-            %   depends on class name
-            
-            %clear dropdown and data structure
-            appObj.DropDown_SynthesisOption.Items = {};
-            appObj.p_LoadedMethods = [];
-            
-            %get list of properties
-            propList = properties(classname);
-            
-            %if class has name properties read properties
-            if length(propList)>1
-                eval(['item = ',convertStringsToChars(classname),'.',...
-                    propList{2},';'])
-                 %%
-                    %TODO: in service app class
-                    %set app data structure with names for dropdown and
-                    %method names for callback
-                appObj.p_LoadedMethods = [appObj.p_LoadedMethods; item];
-                
-                %set dropdown
-                for i = 1:length(item)
-                    appObj.DropDown_SynthesisOption.Items = ...
-                        [appObj.DropDown_SynthesisOption.Items, item(i,1)];
-                end
+        function FuncList = getFunctionsToCall(obj,ClassName)
+            %getFunctionsToCalletermines list of functions which will be
+            %called from app
+            %   ClassName - list of classes, which contain functions need 
+            %   to be called
+            FuncList = [];
+            PropertyList = properties(ClassName);
+            if length(PropertyList) > 1
+                eval(['FuncList = ',convertStringsToChars(ClassName),'.',...
+                    PropertyList{2},';']);
+            end            
+        end
+        
+        function GUILayOut = getGUILayOut(obj,ClassName)
+            %getGUILayOut read the GUILayOut property in connected modules
+            %to determine the possibility of GUILayOut
+            %   ClassName - list of classes, 
+           PropertyList = properties(ClassName);
+           if length(PropertyList) > 1
+                eval(['GUILayOut = ',convertStringsToChars(ClassName),'.',...
+                    PropertyList{3},';']);
+            end
+        end
+        
+        function inputList = get_inputList(obj,ClassName)
+           PropertyList = properties(ClassName);
+           if length(PropertyList) > 1
+                eval(['inputList = ',convertStringsToChars(ClassName),'.',...
+                    PropertyList{4},';']);
             end
         end
     end

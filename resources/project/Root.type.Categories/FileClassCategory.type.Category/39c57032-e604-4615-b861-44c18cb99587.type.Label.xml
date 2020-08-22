@@ -1,2 +1,2 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<Info Name="SaA" />
+<Info ReadOnly="WRITABLE" Name="UI" />
